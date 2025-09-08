@@ -9,32 +9,32 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/YOUR_USERNAME/ci-cd-java-sample.git'
+                git branch: 'main', url: 'https://github.com/juanhong26/ci-cd-java-sample.git', credentialsId: 'github-creds'
             }
         }
 
         stage('Build with Gradle') {
             steps {
-                sh './gradlew clean build'
+                bat '.\\gradlew clean build'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh './gradlew test'
+                bat '.\\gradlew test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKERHUB_REPO}:latest ."
+                bat "docker build -t %DOCKERHUB_REPO% ."
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
-                sh "docker push ${DOCKERHUB_REPO}:latest"
+                bat "echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin"
+                bat "docker push %DOCKERHUB_REPO%"
             }
         }
     }
