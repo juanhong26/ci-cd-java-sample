@@ -15,26 +15,26 @@ pipeline {
 
         stage('Build with Gradle') {
             steps {
-                bat '.\\gradlew clean build'
+                sh './gradlew clean build'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '.\\gradlew test'
+                sh './gradlew test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t %DOCKERHUB_REPO% ."
+                sh "docker build -t $DOCKERHUB_REPO ."
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                bat "echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_CREDENTIALS_USR% --password-stdin"
-                bat "docker push %DOCKERHUB_REPO%"
+                sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                sh "docker push $DOCKERHUB_REPO"
             }
         }
     }
