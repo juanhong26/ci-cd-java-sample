@@ -13,11 +13,12 @@ pipeline {
             }
         }
 
-        stage('Build with Gradle') {
-            steps {
-                sh './gradlew clean build'
-            }
-        }
+stage('Build with Gradle') {
+    steps {
+        bat 'gradlew.bat clean build'  // ✅ Windows-compatible
+    }
+}
+
 
         stage('Run Tests') {
             steps {
